@@ -19,7 +19,7 @@ class Kmeans():
 
     '''
     
-    def __init__(self, n_clusters=3, max_iterations=100, tolerance=0.03):
+    def __init__(self, n_clusters=3, max_iterations=100, tolerance=0.0001):
         self.n_clusters = n_clusters
         self.max_iterations = max_iterations
         self.tolerance = tolerance
@@ -62,7 +62,7 @@ class Kmeans():
     
     def copy_centroids(self):
         '''
-        Creates a copy of the class' centroids for comparison with the chnaged 
+        Creates a copy of the class' centroids for comparison with the changed 
         centroids in the next iteration.
 
         Returns
@@ -76,15 +76,13 @@ class Kmeans():
             old_centroids[c] = self.centroids[c]
         return old_centroids.astype(int)
     
-    def Convergence(self, data_points, old_centroids):
+    def Convergence(self, old_centroids):
         '''
         Measures the change between the old and current centroids after each iteration.
         If the change is smaller than the tolerance then the algorithm has converged.
 
         Parameters
         ----------
-        data_points :
-            A numpy array of shape (number_of_datapoints, datapoint size).
         old_centroids :
             A numpy array of the previous iteration's centroids.
 
@@ -95,7 +93,7 @@ class Kmeans():
 
         '''
         convergence = False
-        change = np.sum(np.abs(self.centroids - old_centroids) / old_centroids * 100.0)
+        change = np.sum(np.abs(self.centroids - old_centroids) / (old_centroids * 100))
         if change < self.tolerance:
             convergence = True
         return convergence
@@ -170,7 +168,8 @@ class Kmeans():
             self.E_Step(data_points)
             old_centroids = self.copy_centroids()
             self.M_Step()
-            if self.Convergence(data_points, old_centroids): break
+            if self.Convergence(old_centroids): break
+            print('Iteration: ', iteration)
         return self.centroids, self.labels
 
     def predict(self, data):
