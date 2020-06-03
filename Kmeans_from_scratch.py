@@ -4,22 +4,27 @@ class Kmeans():
     '''
     Implements the Kmeans algorithm for clustering image data.
     
-    Parameters
-    ----------
-    n_clusters:
-        The number of clusters the algorithm is going to fit.
-        
-    max_iteration:
-        The number of iterations the EM algorithm is going to execute.
-        
-    tolerance:
-        The percentage of change between the centroids of conconsecutive iterations
-        tolerated. If the change is smaller the algorithm will be considered as
-        converged.
-
-    '''
-    
+    '''    
     def __init__(self, n_clusters=3, max_iterations=100, tolerance=0.0001):
+        '''
+        Iniatializes the parameters of the algorithm.        
+
+        Parameters
+        ----------
+        n_clusters : optional
+            The number of clusters the algorithm is going to fit. The default is 3.
+        max_iterations : optional
+            The number of iterations the EM algorithm is going to execute. The default is 100.
+        tolerance : optional
+            The percentage of change between the centroids of conconsecutive iterations
+            tolerated. If the change is smaller the algorithm will be considered as
+            converged. The default is 0.0001.
+
+        Returns
+        -------
+        None.
+
+        '''        
         self.n_clusters = n_clusters
         self.max_iterations = max_iterations
         self.tolerance = tolerance
@@ -68,7 +73,7 @@ class Kmeans():
         Returns
         -------
         old_centroids
-            A copy of the class' centroids.
+            The centroids of the previous iteration.
 
         '''
         old_centroids = np.zeros(self.centroids.shape)
@@ -89,7 +94,7 @@ class Kmeans():
         Returns
         -------
         convergence
-            True or False value for the convergene of the algorithm.
+            A Boolean value for the convergene of the algorithm.
 
         '''
         convergence = False
@@ -137,13 +142,12 @@ class Kmeans():
     
     def fit(self, data):
         '''
-        The n_cluster centroids are fitted with the input image data via the EM
+        The n_cluster centroids are fitted with the input image data using the EM
         algorithm.\n
         The centroids and labels are randomly initialized.\n
         The EM algorithm iterates a total of max_iterations, unless the convergence
         criterium is met.\n
-        In each iteration the Estimation step and the Maximization step are 
-        executed.\n 
+        In each iteration the Estimation step and the Maximization step are executed.\n 
         The centroids of each iteration are compared with the centroids
         of the previous iteration, to check for convergence.
 
@@ -174,7 +178,7 @@ class Kmeans():
 
     def predict(self, data):
         '''
-        Calculates the distances of each piexl in the input image data with the
+        Calculates the distances of each pixel in the input image data with the
         fitted centroids.
 
         Parameters
@@ -185,8 +189,8 @@ class Kmeans():
         Returns
         -------
         clustered_data
-            Each pixel of the input image data gets replaced by the centroid that
-            is closest to.
+            A numpy array of the clustered image. Each pixel of the input image 
+            data gets replaced by the centroid that is closest to.
 
         '''
         data_points = data.reshape(-1, data.shape[-1])
